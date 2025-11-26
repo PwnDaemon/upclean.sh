@@ -31,3 +31,11 @@ You must grant execution permission to the script file:
 
 ```bash
 chmod +x upclean.sh
+```
+
+### 3. Run the script
+Execute the script using the ./ prefix.
+
+```bash
+./upclean.sh
+```
