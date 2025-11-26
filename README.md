@@ -13,8 +13,7 @@ This script automates the complete maintenance cycle for **Debian/Ubuntu-based s
 * **User Experience:** Includes a `clear` command at startup and color-coded output for readability.
 
 
-## 🚀 How to Use
-
+## 🚀 Usage
 Follow these steps to download and run the script on your system:
 
 ### 1. Download
