@@ -28,6 +28,12 @@ YELLOW='\033[33m'
 
 ## FUNCTIONS ##
 
+if [ "$EUID" -ne 0 ]; then
+  echo -e "\n${BOLD}${RED}ERROR: Este script debe ejecutarse con privilegios de root (usando 'sudo').${RESET}"
+  echo -e "Ejecuta: sudo ./$(basename "$0")\n"
+  exit 1
+fi
+
 # Error handler
 handle_error() {
     echo -e "\n${BOLD}${RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${RESET}"
