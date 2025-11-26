@@ -35,39 +35,39 @@ echo -e "${BOLD}${YELLOW}[!] Starting complete system maintenance [!]${RESET}"
 echo "Start: $(date)"
 echo
 
-echo -e "${BOLD}${CYAN}[*] Updating package list [*]${RESET}"
+echo -e "${BOLD}${CYAN}[*] Updating package list...${RESET}"
 echo
-sudo apt update || { echo "Error in apt update. Terminating."; exit 1; }
-echo
-
-echo -e "${BOLD}${CYAN}[*] Updating installed packages [*]${RESET}"
-echo
-sudo apt upgrade -y || { echo "Error in apt upgrade. Continuing with cleanup."; }
+sudo apt update > /dev/null 2>&1 || { echo "Error in apt update. Terminating."; exit 1; }
 echo
 
-echo -e "${BOLD}${CYAN}[*] Full upgrade [*]${RESET}"
+echo -e "${BOLD}${CYAN}[*] Updating installed packages...${RESET}"
 echo
-sudo apt full-upgrade -y || { echo "Error in apt full-upgrade. Continuing with cleanup."; }
-echo
-
-echo -e "${BOLD}${CYAN}[*] Distribution upgrade [*]${RESET}"
-echo
-sudo apt dist-upgrade -y || { echo "Error in apt dist-upgrade. Continuing with cleanup."; }
+sudo apt upgrade -y > /dev/null 2>&1 || { echo "Error in apt upgrade. Continuing with cleanup."; }
 echo
 
-echo -e "${BOLD}${CYAN}[*] Deleting outdated .deb files [*]${RESET}"
+echo -e "${BOLD}${CYAN}[*] Full upgrade...${RESET}"
 echo
-sudo apt clean
-echo
-
-echo -e "${BOLD}${CYAN}[*] Deleting orphaned dependencies [*]${RESET}"
-echo
-sudo apt autoremove -y
+sudo apt full-upgrade -y > /dev/null 2>&1 || { echo "Error in apt full-upgrade. Continuing with cleanup."; }
 echo
 
-echo -e "${BOLD}${CYAN}[*] Cleaning outdated package cache [*]${RESET}"
+echo -e "${BOLD}${CYAN}[*] Distribution upgrade...${RESET}"
 echo
-sudo apt autoclean
+sudo apt dist-upgrade -y > /dev/null 2>&1 || { echo "Error in apt dist-upgrade. Continuing with cleanup."; }
+echo
+
+echo -e "${BOLD}${CYAN}[*] Deleting outdated .deb files...${RESET}"
+echo
+sudo apt clean > /dev/null 2>&1
+echo
+
+echo -e "${BOLD}${CYAN}[*] Deleting orphaned dependencies...${RESET}"
+echo
+sudo apt autoremove -y > /dev/null 2>&1
+echo
+
+echo -e "${BOLD}${CYAN}[*] Cleaning outdated package cache...${RESET}"
+echo
+sudo apt autoclean > /dev/null 2>&1 
 echo
 
 END_TIME=$SECONDS
