@@ -7,12 +7,15 @@
 ## Date: 2025-11-26
 ## -------------------------------------------------------------------
 
+# Enviroment configuration:
 export LANG='en_US.UTF-8' 
 
+# Robustness configuration:
 set -e          
 set -u          
 set -o pipefail 
 
+# Save start time in seconds
 START_TIME=$SECONDS
 
 # ANSI color codes
@@ -23,15 +26,21 @@ GREEN='\033[32m'
 BOLD='\033[1m'
 YELLOW='\033[33m'
 
+## FUNCTIONS ##
+
+# Error handler
 handle_error() {
-    echo -e "\n${BOLD}${RED}[ERROR] The script failed on line $1.${RESET}"
-    echo -e "${BOLD}${RED}[ERROR] Review the previous APT error message and resolve it.\n${RESET}"
+    echo -e "\n${BOLD}${RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${RESET}"
+    echo -e "${BOLD}${RED}[FATAL ERROR] The script failed on line $1.${RESET}"
+    echo -e "${BOLD}${RED}Review the previous APT error message and resolve it.${RESET}"
+    echo -e "${BOLD}${RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${RESET}\n"
 }
 
+# Executes handle_error if the error signal (ERR) is received
 trap 'handle_error $LINENO' ERR
 
 
-# Animation function
+# Shows a spinner while waiting
 spinner() {
     local pid=$1
     local delay=0.1
@@ -49,22 +58,22 @@ spinner() {
 run_animated_task() {
     local title="$1"
     local command="$2"
-     
-    #Print title without newline
+    
+    # Print title without newline
     printf "${BOLD}${CYAN}[*] %s ${RESET}" "$title"
     
-    #Execute command in background, silencing its output
+    # Execute command in background, silencing its output
     ( eval "$command" > /dev/null 2>&1 ) & 
     local pid=$!
 
-    #Start the spinner
+    # Start the spinner
     spinner $pid
     
-    #Wait for the command to finish and capture the exit status
+    # Wait for the command to finish and capture the exit status
     wait $pid
     local status=$?
 
-    #Clear the line and display the result [ OK ] / [ FAIL ]
+    # Clear the line and display the result [ OK ] / [ FAIL ]
     printf "\r%s\r" "$(tput el)" # Carriage return and clear line
 
     if [ "$status" -eq 0 ]; then
@@ -75,25 +84,44 @@ run_animated_task() {
 }
 
 
-# --- SCRIPT START ---
+## SCRIPT START ##
 
 clear
 echo -e "${BOLD}${YELLOW}[!] STARTING COMPLETE SYSTEM MAINTENANCE [!]${RESET}"
 echo "$(date)"
 echo
 
-#Package Update
-run_animated_task "Updating package list" "sudo apt update"
+# Package Update
+run_animated_task "Updating package lists" "sudo apt update"
 run_animated_task "Installing package upgrades" "sudo apt upgrade -y"
 run_animated_task "Performing full upgrade" "sudo apt full-upgrade -y"
 run_animated_task "Performing distribution upgrade" "sudo apt dist-upgrade -y"
 
-#System Cleanup
-run_animated_task "Deleting outdated .deb files " "sudo apt clean"
-run_animated_task "Removing orphaned dependencies " "sudo apt autoremove -y" 
+# System Cleanup
+run_animated_task "Deleting outdated .deb files" "sudo apt clean"
+run_animated_task "Removing orphaned dependencies" "sudo apt autoremove -y" 
 run_animated_task "Cleaning outdated package cache" "sudo apt autoclean"
 
-# --- Finalization ---
+# Optional temp files clean
+
+echo
+echo -e "${BOLD}${YELLOW}[!] OPTIONAL TEMPORARY FILE CLEANUP [!]${RESET}"
+printf "${BOLD}Do you want to delete temporary files not accessed in the last 7 days? [y/N]: ${RESET}"
+read -r TEMP_CLEANUP_CHOICE 
+
+if [[ "$TEMP_CLEANUP_CHOICE" =~ ^[yY]$ ]]; then
+    
+    echo 
+    TEMP_CLEANUP_CMD="sudo find /tmp /var/tmp -type f -atime +7 -delete 2>/dev/null"
+    
+    run_animated_task "Deleting temporary files older than 7 days" "$TEMP_CLEANUP_CMD"
+    
+else
+    echo 
+    echo -e "${BOLD}${GREEN}Skipping deep temporary file cleanup...${RESET}"
+fi
+
+## FINALIZATION ##
 
 END_TIME=$SECONDS
 DURATION=$((END_TIME - START_TIME))
@@ -101,12 +129,10 @@ HOURS=$((DURATION / 3600))
 MINUTES=$(( (DURATION % 3600) / 60 ))
 SECONDS_FINAL=$((DURATION % 60))
 
-# Extra empty lines for spacing
 echo
 echo
 
 echo -e "${BOLD}${YELLOW}[!] MAINTENANCE FINISHED [!]${RESET}"
+echo "End: $(date)"
 echo -e "\n${BOLD}Total elapsed time: ${HOURS} hours, ${MINUTES} minutes and ${SECONDS_FINAL} seconds.${RESET}"
 echo -e ""
-
-
