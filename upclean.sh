@@ -133,6 +133,5 @@ echo
 echo
 
 echo -e "${BOLD}${YELLOW}[!] MAINTENANCE FINISHED [!]${RESET}"
-echo "End: $(date)"
 echo -e "\n${BOLD}Total elapsed time: ${HOURS} hours, ${MINUTES} minutes and ${SECONDS_FINAL} seconds.${RESET}"
 echo -e ""
