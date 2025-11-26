@@ -9,6 +9,7 @@ This script automates the complete maintenance cycle for **Debian/Ubuntu-based s
 * **Complete Update Chain:** Executes `apt update`, `apt upgrade -y`, `apt full-upgrade -y`, and `apt dist-upgrade -y`.
 * **Deep Cleaning:** Performs multiple cleanup routines (`apt autoremove`, `apt clean`, `apt autoclean`) to free up disk space.
 * **Robust Error Handling:** Uses the `set -euf pipefail` configuration and a custom `trap` function to stop execution immediately and display a clear **RED** error message if any command fails.
+* **Optional Temporary Cleanup:** Prompts the user to delete temporary files not accessed in the last **7 days** (`/tmp`, `/var/tmp`).
 * **Performance Tracking:** Calculates and prints the total time elapsed for the entire maintenance process.
 * **User Experience:** Includes a `clear` command at startup and color-coded output for readability.
 
