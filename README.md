@@ -24,3 +24,10 @@ Clone the repository or download the script file directly:
 ```bash
 git clone https://github.com/PwndDaemon/upclean.sh.git
 cd upclean.sh
+```
+### 2. Permission
+
+You must grant execution permission to the script file:
+
+```bash
+chmod +x upclean.sh
