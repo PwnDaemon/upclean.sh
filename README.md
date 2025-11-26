@@ -22,5 +22,5 @@ Follow these steps to download and run the script on your system:
 Clone the repository or download the script file directly:
 
 ```bash
-git clone [https://github.com/PwndDaemon/upclean.sh.git](https://github.com/PwndDaemon/upclean.sh.git)
+git clone https://github.com/PwndDaemon/upclean.sh.git
 cd upclean.sh
