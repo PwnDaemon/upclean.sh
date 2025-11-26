@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ## -------------------------------------------------------------------
-## SCRIPT DE MANTENIMIENTO COMPLETO (v1.0)
-## Descripción: Actualiza, limpia y optimiza sistemas basados en Debian/Ubuntu.
-## Autor: PwndDaemon
-## Fecha: 2025-11-26
+## FULL MAINTENANCE SCRIPT (v1.0)
+## Description: Updates, cleans, and optimizes Debian/Ubuntu based systems.
+## Author: PwndDaemon
+## Date: 2025-11-26
 ## -------------------------------------------------------------------
 
-export LANG='es_ES.UTF-8'
+export LANG='en_US.UTF-8'
 
 set -e          
 set -u          
@@ -24,64 +24,61 @@ YELLOW='\033[33m'
 
 
 handle_error() {
-    echo -e "${BOLD}${RED}[ERROR] El script falló en la línea $1.${RESET} [ERROR]"
-    echo -e "${BOLD}${RED}[ERROR] Revise el mensaje de error anterior de APT y resuélvalo.${RESET} [ERROR]\n"
+    echo -e "${BOLD}${RED}[ERROR] The script failed on line $1.${RESET} [ERROR]"
+    echo -e "${BOLD}${RED}[ERROR] Review the previous APT error message and resolve it.${RESET} [ERROR]\n"
  }
 
 trap 'handle_error $LINENO' ERR
 
 clear
-echo -e "${BOLD}${YELLOW}[!] Iniciando mantenimiento completo del sistema [!]${RESET}"
-echo "Inicio: $(date)"
+echo -e "${BOLD}${YELLOW}[!] Starting complete system maintenance [!]${RESET}"
+echo "Start: $(date)"
 echo
 
-#Actualización de paquetes
-echo -e "${BOLD}${CYAN}[*] Actualización de la lista de pquetes [*]${RESET}"
+echo -e "${BOLD}${CYAN}[*] Updating package list [*]${RESET}"
 echo
-sudo apt update || { echo "Error en apt update. Terminando."; exit 1; }
-echo
-
-echo -e "${BOLD}${CYAN}[*] Actualizando paquetes instalados [*]${RESET}"
-echo
-sudo apt upgrade -y || { echo "Error en apt upgrade. Continuando con la limpieza."; }
+sudo apt update || { echo "Error in apt update. Terminating."; exit 1; }
 echo
 
-echo -e "${BOLD}${CYAN}[*] Actualización completa [*]${RESET}"
+echo -e "${BOLD}${CYAN}[*] Updating installed packages [*]${RESET}"
 echo
-sudo apt full-upgrade -y || { echo "Error en apt full-upgrade. Continuando con la limpieza."; }
-echo
-
-echo -e "${BOLD}${CYAN}[*] Actualización de la distribución [*]${RESET}"
-echo
-sudo apt dist-upgrade -y || { echo "Error en apt dist-upgrade. Continuando con la limpieza."; }
+sudo apt upgrade -y || { echo "Error in apt upgrade. Continuing with cleanup."; }
 echo
 
-#Limpieza del sistema
-echo -e "${BOLD}${CYAN}[*] Borrando archivos .deb desactualizados [*]${RESET}"
+echo -e "${BOLD}${CYAN}[*] Full upgrade [*]${RESET}"
+echo
+sudo apt full-upgrade -y || { echo "Error in apt full-upgrade. Continuing with cleanup."; }
+echo
+
+echo -e "${BOLD}${CYAN}[*] Distribution upgrade [*]${RESET}"
+echo
+sudo apt dist-upgrade -y || { echo "Error in apt dist-upgrade. Continuing with cleanup."; }
+echo
+
+echo -e "${BOLD}${CYAN}[*] Deleting outdated .deb files [*]${RESET}"
 echo
 sudo apt clean
 echo
 
-echo -e "${BOLD}${CYAN}[*] Borrando dependencias huerfanas [*]${RESET}"
+echo -e "${BOLD}${CYAN}[*] Deleting orphaned dependencies [*]${RESET}"
 echo
 sudo apt autoremove -y
 echo
 
-echo -e "${BOLD}${CYAN}[*] Limpieza de caché de paquetes desactualizados [*]${RESET}"
+echo -e "${BOLD}${CYAN}[*] Cleaning outdated package cache [*]${RESET}"
 echo
 sudo apt autoclean
 echo
 
-#Cálculo del tiempo transcurrido
 END_TIME=$SECONDS
 DURATION=$((END_TIME - START_TIME))
 HOURS=$((DURATION / 3600))
 MINUTES=$(( (DURATION % 3600) / 60 ))
 SECONDS_FINAL=$((DURATION % 60))
 
-echo -e "\n${BOLD}${YELLOW}[!] Mantenimiento finalizado [!]${RESET}"
-echo "Fin: $(date)"
-echo -e "\n${BOLD}Tiempo total transcurrido: ${HOURS} horas, ${MINUTES} minutos y ${SECONDS_FINAL} segundos.${RESET}"
+echo -e "\n${BOLD}${YELLOW}[!] Maintenance finished [!]${RESET}"
+echo "End: $(date)"
+echo -e "\n${BOLD}Total elapsed time: ${HOURS} hours, ${MINUTES} minutes and ${SECONDS_FINAL} seconds.${RESET}"
 echo -e ""
 echo -e "\n${BOLD}${GREEN}[*] Hasta la vista baby! [*]${RESET}\n"
 echo -e""
